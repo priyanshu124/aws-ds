@@ -1,0 +1,7 @@
+# make bucket
+
+aws s3 mb s3://aws-amz-cust-reviews
+
+# copy from s3 public to local
+
+aws s3 cp --recursive s3://amazon-reviews-pds/tsv/  s3://aws-amz-cust-reviews/amazon-reviews-pds/tsv/ --exclude "*" --include "amazon_reviews_us_*"
