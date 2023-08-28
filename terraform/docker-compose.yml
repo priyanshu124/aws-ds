@@ -1,12 +1,21 @@
 version: '3.7'
 
 services:
+  vault:
+    image: vault
+    container_name: vault
+    ports:
+      - "8200:8200"  # Map the Vault server port
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root_token
+
+
   terraform:
     image: hashicorp/terraform:latest
     volumes:
       - .:/infra
+      - /e/projects/dbt-gcp:/dbt-gcp/
     working_dir: /infra
     environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - VAULT_ADDR=http://vault:8200  # Set the address to the Vault service
+      - VAULT_TOKEN=root_token
